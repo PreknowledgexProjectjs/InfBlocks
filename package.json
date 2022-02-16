@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "data-store": "^4.0.3",
+    "electron": "^17.0.1",
+    "jquery": "^3.6.0",
+    "minecraft-launcher-core": "^3.16.11",
+    "minecraft-status": "^1.1.0"
+  },
+  "name": "MinecraftLauncher",
+  "version": "1.0.0",
+  "description": "Cracked launcher",
+  "main": "src/render.js",
+  "author": "Px",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "electron . --no-sandbox"
+  }
+}
