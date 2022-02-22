@@ -16,6 +16,18 @@
     "start": "electron . --no-sandbox",
     "build": "electron-builder"
   },
+  "build": {
+    "appId": "px.xbrowse",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "app_icns/icon.icns"
+    },
+    "win": {
+      "asar": true,
+      "target": "nsis",
+      "icon": "app_icns/icon.ico"
+    }
+  },
   "devDependencies": {
     "electron": "^17.0.1",
     "electron-builder": "^22.14.13"

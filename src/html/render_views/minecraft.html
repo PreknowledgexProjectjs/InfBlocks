@@ -1,0 +1,29 @@
+<div class="card-body">
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Username:</span>
+      <input type="text" id="username" value="Steve" class="form-control" placeholder="Username"   
+          aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Version:</span>
+      <input type="text" id="version" value="1.0" class="form-control" placeholder="version"   
+          aria-label="version" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Min Ram:</span>
+      <input type="text" id="min_ram" value="512M" class="form-control" placeholder="min_ram"   
+          aria-label="min_ram" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Max Ram:</span>
+      <input type="text" id="max_ram" value="512M" class="form-control" placeholder="max_ram"   
+          aria-label="max_ram" aria-describedby="basic-addon1">
+    </div>
+    <div class="card" id="progress" style="display: none;">
+      <div class="card-body">
+        Downloading Version
+        <br>Total Downloaded : <p id="downloaded"></p>
+      </div>
+    </div>
+    <button class="btn btn-success" onclick="startMinecraft()" id="start_btn">Start ></button>
+</div>
