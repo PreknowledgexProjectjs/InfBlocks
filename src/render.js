@@ -15,7 +15,7 @@ const createWindow = () => {
       contextIsolation:false,
       nodeIntegration:true
     },
-    icon: "../app_icns/icon.png"
+    icon: path.join(__dirname, 'icon.ico')
   })
   var isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
   if (!isDev) {
