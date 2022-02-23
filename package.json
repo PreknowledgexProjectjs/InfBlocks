@@ -6,14 +6,15 @@
     "minecraft-status": "^1.1.0"
   },
   "name": "MinecraftLauncher",
-  "version": "1.0.0",
-  "description": "Cracked launcher",
+  "version": "1.0.3",
+  "description": "Btw i'm a creeper",
   "main": "src/render.js",
   "author": "Px",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "electron . --no-sandbox",
+    "start-win": "set APP_DEV=true && electron .",
+    "start-linux": "APP_DEV=true && electron .",
     "build": "electron-builder"
   },
   "build": {

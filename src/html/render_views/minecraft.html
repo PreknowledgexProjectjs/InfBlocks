@@ -1,3 +1,6 @@
+<div class="alert alert-warning">
+  <b> This Custom Page Launcher will not run1.17.x please go to Installations and click Add Installations and in java path type path to java 17+ <button onclick='openView("installations.html","#ins");' class="btn btn-success"> Go to Installations ></button> </b>
+</div>
 <div class="card-body">
     <div class="input-group mb-3">
       <span class="input-group-text" id="basic-addon1">Username:</span>
@@ -6,8 +9,12 @@
     </div>
     <div class="input-group mb-3">
       <span class="input-group-text" id="basic-addon1">Version:</span>
-      <input type="text" id="version" value="1.0" class="form-control" placeholder="version"   
+      <!-- <input type="text" id="version" value="1.0" class="form-control" placeholder="version"   
+          aria-label="version" aria-describedby="basic-addon1"> -->
+      <select id="version" class="form-control" placeholder="version"   
           aria-label="version" aria-describedby="basic-addon1">
+        
+      </select>
     </div>
     <div class="input-group mb-3">
       <span class="input-group-text" id="basic-addon1">Min Ram:</span>
@@ -19,11 +26,7 @@
       <input type="text" id="max_ram" value="512M" class="form-control" placeholder="max_ram"   
           aria-label="max_ram" aria-describedby="basic-addon1">
     </div>
-    <div class="card" id="progress" style="display: none;">
-      <div class="card-body">
-        Downloading Version
-        <br>Total Downloaded : <p id="downloaded"></p>
-      </div>
-    </div>
+    
     <button class="btn btn-success" onclick="startMinecraft()" id="start_btn">Start ></button>
 </div>
+<script type="text/javascript" > initVerList() </script>

@@ -5,12 +5,6 @@
         <input type="text" id="username" value="Steve" class="form-control" placeholder="Username"   
             aria-label="Username" aria-describedby="basic-addon1">
     </div>
-    <div id="i_all" style="margin-top: 5px;"></div>
-    <div class="card" id="progress" style="display: none; margin-top: 10px;">
-        <div class="card-body">
-          initlazing Version
-          <br>Total Initliazed : <p id="downloaded"></p>
-        </div>
-    </div>
+    <div id="i_all" style="margin-top: 5px; height: 420px; overflow: scroll;"></div>
 </div>
 <script> ipcRenderer.send('get_installations'); </script> 

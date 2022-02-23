@@ -31,23 +31,29 @@
                 <strong>IB</strong>
             </div>
 
-            <ul class="list-unstyled components">
-                <li onclick='openView("minecraft.html")'>
+            <ul class="list-unstyled components" >
+                <li onclick='openView("minecraft.html","#mc")' id="mc">
                     <a href="#" class="active">
                         <i class="fas fa-gamepad"></i>
                         Minecraft
                     </a>
                 </li>
-                <li onclick='openView("logger.html");'>
+                <li onclick='openView("logger.html","#log1");' id="log1">
                     <a href="#">
                         <i class="fas fa-list"></i>
                         Logs
                     </a>
                 </li>
-                <li onclick='openView("installations.html");'>
+                <li onclick='openView("installations.html","#ins");' id="ins">
                   <a href="#">
                       <i class="fas fa-download"></i>
                       Installations
+                  </a>
+                </li>
+                <li onclick='openView("settings.html","#ins");' id="ins">
+                  <a href="#">
+                      <i class="fas fa-cog"></i>
+                      Settings
                   </a>
                 </li>
                 <li >
@@ -69,11 +75,14 @@
                         <i class="fas fa-align-left"></i>
                         <span> &cacute; </span>
                     </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
+                
 
-                    
+                    <div class="card" id="progress" style="display: none;">
+                      <div class="card-body">
+                        Initliazing Version
+                        <br>Total Initliazed/Downloaded : <p id="downloaded"></p>
+                      </div>
+                    </div>
                 </div>
             </nav>
             <!-- <div class="card m-5">
@@ -114,8 +123,20 @@
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
-            openView("minecraft.html");
+            openView("minecraft.html","#mc");
         });
+        function initVerList(){
+          $.ajax({
+            url:"https://launchermeta.mojang.com/mc/game/version_manifest.json",
+            success:function(data) {
+
+              $.each(data.versions , (index,data) => {
+                if (data.type == "snapshot") return;
+                $('#version').append(` <option value="${data.id}"> ${data.type} || ${data.id} </option> `);
+              })
+            }
+          });
+        }
 
         // ipcRenderer.send('get_java');
         // ipcRenderer.on('javaVer' , (event,data) => {
@@ -123,17 +144,23 @@
         // })
         var loggere = '';
 
-        function openView($h_file){
+        function openView($h_file,$class = 'no_creepers'){
           $.ajax({
             url : "render_views/"+$h_file,
             success:function(data){
               $('#ajaxView').html(data);
+              if ($class !== 'no_creepers') {
+                $('li').removeClass('active');
+                $($class).attr('class','active');
+              }
             }
           });
+          var audio = new Audio('creeper/Explosion1.ogg');
+          audio.play();
         }
 
         function startMinecraft(){
-          var version = $('#version').val();
+          var version = $('#version option:selected').val();
           var username = $('#username').val();
           var min_ram = $('#min_ram').val();
           var max_ram = $('#max_ram').val();
@@ -145,22 +172,33 @@
             type:"release",
             javaPath:""
           });
+          var audio = new Audio('creeper/Creeper_fuse.ogg');
+          audio.play();
         }
         function play(data){
           var username = $('#username').val();
-          ipcRenderer.send('launch_minecraft', {
+          // ipcRenderer.send('launch_minecraft', {
+          //   username:username,
+          //   version:data.version,
+          //   min_ram:data.min_ram,
+          //   max_ram:data.max_ram,
+          //   type:data.type,
+          //   javaPath:data.javaPath
+          // });
+          var aData = {
             username:username,
-            version:data.version,
-            min_ram:data.min_ram,
-            max_ram:data.max_ram,
-            type:data.type,
-            javaPath:data.javaPath
-          });
+            id:data
+          };
+
+          ipcRenderer.send('launch_minecraft_id',aData);
+
+          var audio = new Audio('creeper/Creeper_fuse.ogg');
+          audio.play();
         }
         function addInstalltion(){
           ipcRenderer.send('save_installation', {
             iname:$('#instalname').val(),
-            javapath:$('#java_exec').val(),
+            javapath:$('#java_exec').val().replace(/\\/g, "\\\\"),
             version:$('#version').val(),
             min_ram:$('#min_ram').val(),
             max_ram:$('#max_ram').val(),
@@ -171,21 +209,23 @@
           $('#log').html(loggere);
         }
         ipcRenderer.on('success', (event, arg) => { 
-          openView("installations.html");
+          openView("installations.html","#ins");
         });
         function remove(id){
           ipcRenderer.send('del_ins',id);
         }
+
         ipcRenderer.on('ib_ins' , (event ,arg) => {
           $.each(arg, function(index, value) {
             var inObj = JSON.stringify(value);
+            console.log(inObj);
             $('#i_all').append(`
               <div class="card" style="margin-top: 10px;">
                 <div class="card-body">
                   <h3 class="card-title"> ${value.iname} </h3>
                   Version : ${value.version} / ${value.type} || 
                   Max / Min Ram : ${value.max_ram} / ${value.min_ram} 
-                  <button class="btn btn-round btn-primary" onclick='play(${inObj})'> <i class="fas fa-play"></i> </button>
+                  <button class="btn btn-round btn-primary" onclick='play("${index}")'> <i class="fas fa-play"></i> </button>
                   <button class="btn btn-round btn-danger" onclick="remove('${index}')"> <i class="fas fa-trash"></i> </button>
                 </div>
               </div>
@@ -199,6 +239,12 @@
           refreshLogger();
           window.location.href="#scrollTo";
         });
+        ipcRenderer.on('versions', (event,data) => {
+          console.log(data);
+        })
+        ipcRenderer.on('download-status' , (event,data) => {
+          console.log(data);
+        })
         ipcRenderer.on('progress', (event, arg) => {
           if (typeof arg.total !== 'undefined') {
             $('#progress').show();
@@ -213,6 +259,8 @@
           var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
           myModal.toggle();
           $('#msg_close').html(` Minecaft Closed with code : ${arg} <br> <div class="alert alert-warning">This is unknown that this is crash or self closed so dont worry if you closed it yourself</div>`);
+          var audio = new Audio('creeper/Creeper_death.oga');
+          audio.play();
         })
 
         function closeb(){
