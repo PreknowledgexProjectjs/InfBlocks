@@ -59,7 +59,7 @@
                 <li >
                   <a href="oldUi.html">
                       <i class="fas fa-back"></i>
-                      I miss old UI :(
+                      Open Old UI
                   </a>
                 </li>
             </ul>
@@ -73,7 +73,7 @@
 
                     <button type="button" id="sidebarCollapse" class="btn btn-info">
                         <i class="fas fa-align-left"></i>
-                        <span> &cacute; </span>
+                        <span>  </span>
                     </button>
                 
 
@@ -271,7 +271,7 @@
           if (arg == 0) return;
           var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
           myModal.toggle();
-          $('#msg_close').html(` Minecaft Closed with code : ${arg} <br> <div class="alert alert-warning">This is unknown that this is crash or self closed so dont worry if you closed it yourself</div>`);
+          $('#msg_close').html(` Minecaft Closed with code : ${arg} <br> <div class="alert alert-warning">If you closed Minecraft then dont worry. but if minecraft crashed please remove any mod packs, shaders and try again. If still Minecraft fails to start create a new installation or try a different version of the game.</div>`);
           var audio = new Audio('creeper/Creeper_death.oga');
           audio.play();
         })
