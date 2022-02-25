@@ -143,10 +143,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-adm-zip@^0.4.13:
-  version "0.4.16"
-  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.4.16.tgz#cf4c508fdffab02c269cbc7f471a875f05570365"
-  integrity sha512-TFi4HBKSGfIKsK5YCkKaaFG2m4PEDyViZmEwof3MTIgzimHLto6muaHVpbrljdIvIrFZzEq/p4nafOeLcYegrg==
+adm-zip@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.9.tgz#b33691028333821c0cf95c31374c5462f2905a83"
+  integrity sha512-s+3fXLkeeLjZ2kLjCBwQufpI5fuN+kIGBxu6530nVQZGVol0d7Y/M88/xw9HGGUcJjKf8LutN3VPRUBq6N7Ajg==
 
 agent-base@6:
   version "6.0.2"
@@ -464,10 +464,10 @@ chalk@^4.1.0, chalk@^4.1.1:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-checksum@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/checksum/-/checksum-0.1.1.tgz#dc6527d4c90be8560dbd1ed4cecf3297d528e9e9"
-  integrity sha1-3GUn1MkL6FYNvR7Uzs8yl9Uo6ek=
+checksum@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/checksum/-/checksum-1.0.0.tgz#39d9b5eef273a6a53203900f6780ee8881ab39e5"
+  integrity sha512-68bHejnM/sBQhjXcXd2mFusICnqAwikZ9RVMURIacWh7moNjgOdHKimS6yk30Np/PwfR00dceY4b1GwWanu5cg==
   dependencies:
     optimist "~0.3.5"
 
@@ -1458,16 +1458,6 @@ mimic-response@^1.0.0, mimic-response@^1.0.1:
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
   integrity sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
 
-minecraft-launcher-core@^3.16.11:
-  version "3.16.11"
-  resolved "https://registry.yarnpkg.com/minecraft-launcher-core/-/minecraft-launcher-core-3.16.11.tgz#35767a675cf460a29f31a5e1b771e862af611ccd"
-  integrity sha512-FQXGcANy0XDEs9koGLpipmVMSQxL17RBlqWPzCNLCMCTSo9gzq5+/bgX32C10ebv7M3755zdrhd5J300yaCsUg==
-  dependencies:
-    adm-zip "^0.4.13"
-    checksum "^0.1.1"
-    request "^2.88.0"
-    uuid "^8.3.2"
-
 minecraft-status@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/minecraft-status/-/minecraft-status-1.1.0.tgz#413dea18b6d469002cbbb53d095589b0844974da"
@@ -1700,7 +1690,7 @@ registry-url@^5.0.0:
   dependencies:
     rc "^1.2.8"
 
-request@^2.88.0:
+request@^2.88.2:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==

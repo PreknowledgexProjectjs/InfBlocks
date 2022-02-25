@@ -21,7 +21,7 @@
 
 </head>
 
-<body>
+<body >
 
     <div class="wrapper">
         <!-- Sidebar  -->
@@ -66,7 +66,7 @@
         </nav>
 
         <!-- Page Content  -->
-        <div id="content">
+        <div id="content" style="background-image: url('https://cdn.vox-cdn.com/thumbor/2D0fSxmi24Zw7aaB3M_TViUavrc=/1400x788/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/15957232/0fe20042_0bb8_4781_82f4_7130f928b021.jpg');">
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
@@ -98,13 +98,13 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Minecraft Closed / Crashed</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-round" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" id="msg_close">
             
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeb()">Close</button>
+            <button type="button" class="btn btn-secondary btn-round" data-bs-dismiss="modal" onclick="closeb()">Close</button>
           </div>
 		  
         </div>
@@ -119,6 +119,13 @@
     <script type="text/javascript">
       const $ = require('jquery');
       const { ipcRenderer } = require('electron');
+      if (localStorage.username == undefined) {
+        localStorage.setItem('username','Steve');
+      }else if (localStorage.username == ''){
+        localStorage.setItem('username','Alex');
+      }else if (localStorage.username == null){
+        localStorage.setItem('username','Steve');
+      }
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
@@ -161,7 +168,7 @@
 
         function startMinecraft(){
           var version = $('#version option:selected').val();
-          var username = $('#username').val();
+          var username = localStorage.username;
           var min_ram = $('#min_ram').val();
           var max_ram = $('#max_ram').val();
           ipcRenderer.send('launch_minecraft', {
@@ -176,7 +183,7 @@
           audio.play();
         }
         function play(data){
-          var username = $('#username').val();
+          var username = localStorage.username;
           // ipcRenderer.send('launch_minecraft', {
           //   username:username,
           //   version:data.version,
@@ -202,8 +209,12 @@
             version:$('#version').val(),
             min_ram:$('#min_ram').val(),
             max_ram:$('#max_ram').val(),
-            type:$('#v_type option:selected').val()
+            type:$('#v_type option:selected').val(),
+            cversion:$('#cversion').val()
           });
+        }
+        function setUser(){
+          localStorage.setItem('username',$('#user_name').val());
         }
         function refreshLogger(){
           $('#log').html(loggere);
@@ -225,8 +236,8 @@
                   <h3 class="card-title"> ${value.iname} </h3>
                   Version : ${value.version} / ${value.type} || 
                   Max / Min Ram : ${value.max_ram} / ${value.min_ram} 
-                  <button class="btn btn-round btn-primary" onclick='play("${index}")'> <i class="fas fa-play"></i> </button>
-                  <button class="btn btn-round btn-danger" onclick="remove('${index}')"> <i class="fas fa-trash"></i> </button>
+                  <button class="ibtn btn btn-round btn-primary" onclick='play("${index}")'> <i class="fas fa-play"></i> </button>
+                  <button class="ibtn btn btn-round btn-danger" onclick="remove('${index}')"> <i class="fas fa-trash"></i> </button>
                 </div>
               </div>
             `);
@@ -254,8 +265,10 @@
             }
           }
         })
-        ipcRenderer.on('close', (event, arg) => { 
+        ipcRenderer.on('close', (event, arg) => {
+          loggere = "";
           $('#start_btn').removeAttr('disabled');
+          if (arg == 0) return;
           var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
           myModal.toggle();
           $('#msg_close').html(` Minecaft Closed with code : ${arg} <br> <div class="alert alert-warning">This is unknown that this is crash or self closed so dont worry if you closed it yourself</div>`);

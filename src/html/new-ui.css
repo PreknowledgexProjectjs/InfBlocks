@@ -1,3 +1,6 @@
+.ibtn , a , button{
+    border-radius: 120px;
+}
 body {
     font-family: 'Segoe UI'; font-weight: bold;
     background: #fafafa;
