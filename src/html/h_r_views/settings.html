@@ -1,0 +1,11 @@
+<div class="form-group">
+    <span class="input-group-text" id="basic-addon1">Default Username:</span>
+    <input type="text" id="user_name" value="" class="form-control" placeholder="Set a default Username"   
+    aria-label="user_name" aria-describedby="basic-addon1">
+</div>
+
+<button onclick="setUser()" class="ibtn btn btn-secondary btn-round"> Save Username </button>
+
+<script type="text/javascript">
+    $('#user_name').val(localStorage.username);
+</script>

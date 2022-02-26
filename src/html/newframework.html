@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>InfiniteBlock Client (Expirmental (Half-Moon))</title>
+	<!-- Halfmoon CSS -->
+	<link href="half_moon/css/halfmoon-variables.min.css" rel="stylesheet" />
+	<!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <style type="text/css">
+    	.ibtn{
+    		border-radius: 20px;
+    	}
+    </style>
+</head>
+<body data-dm-shortcut-enabled="true" data-sidebar-shortcut-enabled="true" data-set-preferred-mode-onload="true">
+<!-- Page wrapper with .with-sidebar class -->
+  <div class="page-wrapper with-sidebar" style="background-image: url('https://www.minecraft.net/content/dam/games/minecraft/key-art/CC2_KeyArt_1140x565.jpg.transform/minecraft-image-large/image.jpg');">
+
+    <!-- Sidebar (immediate child of the page wrapper) -->
+    <div class="sidebar">
+      <div class="sidebar-menu">
+        <!-- Sidebar brand -->
+        <a href="#" class="sidebar-brand">
+          <img src="../icon.ico" alt="Infinite Blocks">
+          Infinite Blocks
+        </a>
+        <br/>
+
+        <a href="#" class="sidebar-link" onclick='openView("minecraft.html","#mc")'>
+         <i class="fas fa-gamepad"></i>	Minecraft
+        </a>
+        <a href="#" class="sidebar-link" onclick='openView("logger.html","#log1");'>
+        	<i class="fas fa-list"></i> Logs
+        </a>
+        <a href="#" class="sidebar-link" onclick='openView("installations.html","#ins");'>
+        	<i class="fas fa-download"></i> Installations
+    	</a>
+        <a href="#" class="sidebar-link" onclick='openView("settings.html","#ins");'>
+        	 <i class="fas fa-cog"></i> Settings
+    	</a>
+      </div>
+    </div>
+    <nav class="navbar">
+      <!-- Navbar content (with toggle sidebar button) -->
+      <div class="navbar-content">
+        <button class="btn btn-action" type="button">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+          <span class="sr-only">Toggle sidebar</span> <!-- sr-only = show only on screen readers -->
+        </button>
+      </div>
+      <!-- Navbar brand -->
+      <a href="#" class="navbar-brand">
+        <img src="..." alt="...">
+        Brand
+      </a>
+      <!-- Navbar text -->
+      <span class="navbar-text text-monospace">v3.0</span> <!-- text-monospace = font-family shifted to monospace -->
+      <!-- Navbar nav -->
+      <ul class="navbar-nav d-none d-md-flex"> <!-- d-none = display: none, d-md-flex = display: flex on medium screens and up (width > 768px) -->
+        <li class="nav-item active">
+          <a href="#" class="nav-link">Docs</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Products</a>
+        </li>
+      </ul>
+      <!-- Navbar form (inline form) -->
+      <form class="form-inline d-none d-md-flex ml-auto" action="..." method="..."> <!-- d-none = display: none, d-md-flex = display: flex on medium screens and up (width > 768px), ml-auto = margin-left: auto -->
+        <input type="text" class="form-control" placeholder="Email address" required="required">
+        <button class="btn btn-primary" type="submit">Sign up</button>
+      </form>
+      <!-- Navbar content (with the dropdown menu) -->
+      <div class="navbar-content d-md-none ml-auto"> <!-- d-md-none = display: none on medium screens and up (width > 768px), ml-auto = margin-left: auto -->
+        <div class="dropdown with-arrow">
+          <button class="btn" data-toggle="dropdown" type="button" id="navbar-dropdown-toggle-btn-1">
+            Menu
+            <i class="fa fa-angle-down" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right w-200" aria-labelledby="navbar-dropdown-toggle-btn-1"> <!-- w-200 = width: 20rem (200px) -->
+            <a href="#" class="dropdown-item">Docs</a>
+            <a href="#" class="dropdown-item">Products</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-content">
+              <form action="..." method="...">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Email address" required="required">
+                </div>
+                <button class="btn btn-primary btn-block" type="submit">Sign up</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- Content wrapper -->
+    <div class="content-wrapper" style="margin:20px; width:890px;">
+
+      <div id="ajaxView" >
+              
+       </div>
+    </div>
+  </div>
+  <div class="modal" id="modal-6" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <button class="close" data-dismiss="modal" type="button" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h5 class="modal-title">Minecraft Closed / Crashed</h5>
+      <p id="msg_close">
+      </p>
+      <div class="text-right mt-20"> <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+        <button class="btn mr-5" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Halfmoon JS -->
+<script src="half_moon/js/halfmoon.min.js"></script>
+<!-- jQuery CDN-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+      const $ = require('jquery');
+      const { ipcRenderer } = require('electron');
+      if (localStorage.username == undefined) {
+        localStorage.setItem('username','Steve');
+      }else if (localStorage.username == ''){
+        localStorage.setItem('username','Alex');
+      }else if (localStorage.username == null){
+        localStorage.setItem('username','Steve');
+      }
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+            openView("minecraft.html","#mc");
+        });
+        function initVerList(){
+          $.ajax({
+            url:"https://launchermeta.mojang.com/mc/game/version_manifest.json",
+            success:function(data) {
+
+              $.each(data.versions , (index,data) => {
+                if (data.type == "snapshot") return;
+                $('#version').append(` <option value="${data.id}"> ${data.type} || ${data.id} </option> `);
+              })
+            }
+          });
+        }
+
+        // ipcRenderer.send('get_java');
+        // ipcRenderer.on('javaVer' , (event,data) => {
+        //   $('#javaV').html("Java Version : " + data);
+        // })
+        var loggere = '';
+
+        function openView($h_file,$class = 'no_creepers'){
+          $.ajax({
+            url : "h_r_views/"+$h_file,
+            success:function(data){
+              $('#ajaxView').html(data);
+              if ($class !== 'no_creepers') {
+                $('li').removeClass('active');
+                $($class).attr('class','active');
+              }
+            }
+          });
+          var audio = new Audio('creeper/Explosion1.ogg');
+          audio.play();
+        }
+
+        function startMinecraft(){
+          var version = $('#version option:selected').val();
+          var username = localStorage.username;
+          var min_ram = $('#min_ram').val();
+          var max_ram = $('#max_ram').val();
+          ipcRenderer.send('launch_minecraft', {
+            username:username,
+            version:version,
+            min_ram:min_ram,
+            max_ram:max_ram,
+            type:"release",
+            javaPath:""
+          });
+          var audio = new Audio('creeper/Creeper_fuse.ogg');
+          audio.play();
+        }
+        function play(data){
+          var username = localStorage.username;
+          // ipcRenderer.send('launch_minecraft', {
+          //   username:username,
+          //   version:data.version,
+          //   min_ram:data.min_ram,
+          //   max_ram:data.max_ram,
+          //   type:data.type,
+          //   javaPath:data.javaPath
+          // });
+          var aData = {
+            username:username,
+            id:data
+          };
+
+          ipcRenderer.send('launch_minecraft_id',aData);
+
+          var audio = new Audio('creeper/Creeper_fuse.ogg');
+          audio.play();
+        }
+        function addInstalltion(){
+          ipcRenderer.send('save_installation', {
+            iname:$('#instalname').val(),
+            javapath:$('#java_exec').val().replace(/\\/g, "\\\\"),
+            version:$('#version').val(),
+            min_ram:$('#min_ram').val(),
+            max_ram:$('#max_ram').val(),
+            type:$('#v_type option:selected').val(),
+            cversion:$('#cversion').val()
+          });
+        }
+        function setUser(){
+          localStorage.setItem('username',$('#user_name').val());
+        }
+        function refreshLogger(){
+          $('#log').html(loggere);
+        }
+        ipcRenderer.on('success', (event, arg) => { 
+          openView("installations.html","#ins");
+        });
+        function remove(id){
+          ipcRenderer.send('del_ins',id);
+        }
+
+        ipcRenderer.on('ib_ins' , (event ,arg) => {
+          $.each(arg, function(index, value) {
+            var inObj = JSON.stringify(value);
+            console.log(inObj);
+            // $('#i_all').append(`
+            //   <div class="card" style="margin-top: 10px;">
+            //     <div class="card-body">
+            //       <h3 class="card-title"> ${value.iname} </h3>
+            //       Version : ${value.version} / ${value.type} || 
+            //       Max / Min Ram : ${value.max_ram} / ${value.min_ram} 
+            //       <button class="ibtn btn btn-round btn-primary" onclick='play("${index}")'> <i class="fas fa-play"></i> </button>
+            //       <button class="ibtn btn btn-round btn-danger" onclick="remove('${index}')"> <i class="fas fa-trash"></i> </button>
+            //     </div>
+            //   </div>
+            // `);
+            $('#i_all').append(`
+				<div class="card">
+				  <h2 class="card-title">
+				    ${value.iname}
+				  </h2>
+				  <p>
+				    Version : ${value.version} / ${value.type} || 
+                    Max / Min Ram : ${value.max_ram} / ${value.min_ram} 
+				  </p>
+				  <div class="text-right"> <!-- text-right = text-align: right -->
+				   <button class="ibtn btn btn-round btn-primary" onclick='play("${index}")'> <i class="fas fa-play"></i> </button>
+                   <button class="ibtn btn btn-round btn-danger" onclick="remove('${index}')"> <i class="fas fa-trash"></i> </button>
+				  </div>
+				</div>
+			`);
+          });
+        })
+
+        ipcRenderer.on('logger', (event, arg) => {
+        // $('#logg').append(''+arg+'</br>');
+          loggere += ''+arg+'</br>';
+          refreshLogger();
+          window.location.href="#scrollTo";
+        });
+        ipcRenderer.on('versions', (event,data) => {
+          console.log(data);
+        })
+        ipcRenderer.on('download-status' , (event,data) => {
+          console.log(data);
+        })
+        ipcRenderer.on('progress', (event, arg) => {
+          if (typeof arg.total !== 'undefined') {
+            $('#progress').show();
+            $('#downloaded').html( " <text class='text text-primary'> " + arg.task + " / " +arg.total + " </text>" + " Downloaded");
+            if(arg.task == arg.total){
+              $('#start_btn').attr('disabled','');
+            }
+          }
+        })
+        ipcRenderer.on('close', (event, arg) => {
+          loggere = "";
+          $('#start_btn').removeAttr('disabled');
+          if (arg == 0) return;
+          halfmoon.toggleModal('modal-6')
+          $('#msg_close').html(` Minecaft Closed with code : ${arg} <br> <div class="alert alert-warning">If you closed Minecraft then dont worry. but if minecraft crashed please remove any mod packs, shaders and try again. If still Minecraft fails to start create a new installation or try a different version of the game.</div>`);
+          var audio = new Audio('creeper/Creeper_death.oga');
+          audio.play();
+        })
+
+        function closeb(){
+          $('.modal-backdrop').remove();
+        }
+</script>
+</body>
+</html>

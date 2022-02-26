@@ -1,0 +1,13 @@
+<div class="form-group">
+<a class="btn btn-primary" onclick='openView("add_ins.html");'>Add Installation + </a>
+</div>
+<div>
+    
+    <!-- <div class="input-group mb-3" style="margin-top: 8px;">
+        <span class="input-group-text" id="basic-addon1">Username:</span>
+        <input type="text" id="username" value="Steve" class="form-control" placeholder="Username"   
+            aria-label="Username" aria-describedby="basic-addon1">
+    </div> -->
+    <div id="i_all" style="margin-top: 5px; height: 420px; width: 870px; overflow: scroll;"></div>
+</div>
+<script> ipcRenderer.send('get_installations'); </script> 

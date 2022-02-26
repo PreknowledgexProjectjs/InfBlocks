@@ -7,6 +7,17 @@ const launcher = new Client();
 const ib_insatlls = require('data-store')({ path: app.getPath('userData') + '/ib-instlls.json' });
 
 var PublicWin;
+var pathWin = app.getPath('userData')+"/../.gloablx";
+const global_X = require('data-store')({ path: pathWin + '/expirmental.json' });
+var halfmoon = global_X.get('halfmoon_is_enabled');
+var htmlLoad;
+
+if (halfmoon == undefined) {
+  global_X.set('halfmoon_is_enabled',false);
+  htmlLoad = "html.html"
+}else if (halfmoon == true) {
+  htmlLoad = "newframework.html"
+}
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -24,7 +35,7 @@ const createWindow = () => {
     if (!isDev) {
       Menu.setApplicationMenu(null)
     }
-    win.loadFile('src/html/html.html')
+    win.loadFile('src/html/'+htmlLoad)
   }
   ipcMain.on('save_installation', (event, data) => { 
     ib_insatlls.set('idtimestamp'+Date.now() , data);

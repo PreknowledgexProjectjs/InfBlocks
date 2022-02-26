@@ -1,0 +1,46 @@
+<div class="m-5">
+    <div class="card">
+        <h3 class="card-title"><space> + Add Installation </h3>
+        <div class="card-body">
+            <div>
+                <span class="input-group-text" id="basic-addon1">Name:</span>
+                <input type="text" id="instalname" value="" class="form-control" placeholder="Type Anything you want "   
+                    aria-label="version" aria-describedby="basic-addon1">
+            </div>
+            <div>
+                <span class="input-group-text" id="basic-addon1">Type :</span>
+                <select class="form-control" id="v_type">
+                    <option value="release"> Release </option>
+                    <option value="snapshot"> Snapshot </option>
+                </select>
+            </div>
+            <div>
+                <span class="input-group-text" id="basic-addon1">Java Executable Path:</span>
+                <input type="text" id="java_exec" value="" class="form-control" placeholder="Leave Empty if you dont want to set custom java"   
+                    aria-label="version" aria-describedby="basic-addon1">
+            </div>
+            <div>
+                <span class="input-group-text" id="basic-addon1">Version:</span>
+                <input type="text" id="version" value="1.0" class="form-control" placeholder="version"   
+                    aria-label="version" aria-describedby="basic-addon1">
+            </div>
+            <div>
+                <span class="input-group-text" id="basic-addon1">Custom Version:</span>
+                <input type="text" id="cversion" value="" class="form-control" placeholder="Custom Version Example : AngryVillager_Mod"   
+                    aria-label="version" aria-describedby="basic-addon1">
+            </div>
+            <div>
+                <span class="input-group-text" id="basic-addon1">Min Ram:</span>
+                <input type="text" id="min_ram" value="512M" class="form-control" placeholder="min_ram"   
+                    aria-label="min_ram" aria-describedby="basic-addon1">
+            </div>
+            <div>
+                <span class="input-group-text" id="basic-addon1">Max Ram:</span>
+                <input type="text" id="max_ram" value="512M" class="form-control" placeholder="max_ram"   
+                    aria-label="max_ram" aria-describedby="basic-addon1">
+            </div>
+
+            <button style="margin-top:10px;" class="ibtn btn btn-primary btn-round" onclick="addInstalltion()"> Add Installation </button>
+        </div>
+    </div>
+</div>
