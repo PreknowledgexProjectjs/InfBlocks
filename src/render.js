@@ -5,7 +5,9 @@ const { Client, Authenticator } = require('../core/index.js');
 const MinecraftServerListPing = require("minecraft-status").MinecraftServerListPing;
 const launcher = new Client();
 const ib_insatlls = require('data-store')({ path: app.getPath('userData') + '/ib-instlls.json' });
-
+const msmc = require("msmc");
+const fetch = require("node-fetch");
+msmc.setFetch(fetch)
 var PublicWin;
 var pathWin = app.getPath('userData')+"/../.gloablx";
 const global_X = require('data-store')({ path: pathWin + '/expirmental.json' });
@@ -17,6 +19,8 @@ if (halfmoon == undefined) {
   htmlLoad = "html.html"
 }else if (halfmoon == true) {
   htmlLoad = "newframework.html"
+}else{
+  htmlLoad = "html.html"
 }
 
 const createWindow = () => {
@@ -78,7 +82,7 @@ const createWindow = () => {
 
   ipcMain.on('launch_minecraft_id' , (event,data) => {
     var install = ib_insatlls.get(data.id);
-    LaunchMC({
+    var opt = {
       username:data.username,
       javaPath:install.javapath,
       version:install.version,
@@ -87,7 +91,16 @@ const createWindow = () => {
       min_ram:install.min_ram,
       id:ib_insatlls.get(data.id),
       custom:install.cversion
-    },event);
+    };
+    if ( typeof data.isMsft !== 'undefined' ) {
+      if (data.isMsft == true) {
+        LaunchMC_Microsoft(opt,event);
+      }else{
+        LaunchMC(opt,event);
+      }
+    }else{
+      LaunchMC(opt,event);
+    }
   })
 
   function LaunchMC(data,event){
@@ -126,8 +139,8 @@ const createWindow = () => {
               max: data.max_ram,
               min: data.min_ram
           }
-        }
       }
+    }
 
       launcher.launch(opts);
       
@@ -136,6 +149,71 @@ const createWindow = () => {
       launcher.on('download-status', (e) => event.reply('download-status', e));
       launcher.on('progress', (e) => event.reply('progress', e));
       launcher.on('close' , (e) => unHide(e,event));
+  }
+
+  function LaunchMC_Microsoft(data,event){
+
+    msmc.fastLaunch("raw",
+    (update) => {
+        //A hook for catching loading bar events and errors, standard with MSMC
+        console.log("CallBack!!!!!")
+        console.log(update)
+    }).then(result => {
+        //Let's check if we logged in?
+        if (msmc.errorCheck(result)){
+            console.log(result.reason)
+            return;
+        }
+        let opts;
+        if (typeof data.custom == 'undefined') {
+          console.log("Launching Normally");
+           opts = {
+            clientPackage: null,
+            authorization:msmc.getMCLC().getAuth(result),
+            root: app.getPath('userData')+`/`+"minecraft_dir",
+            javaPath: data.javaPath,
+            version: {
+                number: data.version,
+                type: data.type //default : release
+            },
+            memory: {
+                max: data.max_ram,
+                min: data.min_ram
+            }
+          }
+        }else{
+          console.log("Launching Advanced");
+          opts = {
+              clientPackage: null,
+              authorization:msmc.getMCLC().getAuth(result),
+              root: app.getPath('userData')+`/`+"minecraft_dir",
+              javaPath: data.javaPath,
+              version: {
+                  number: data.version,
+                  type: data.type, //default : release,
+                  custom: data.custom,
+              },
+              memory: {
+                  max: data.max_ram,
+                  min: data.min_ram
+              }
+          }
+        }
+        //If the login works
+        
+        console.log("Starting!")
+        launcher.launch(opts);
+      
+        launcher.on('debug', (e) => event.reply('logger', e));
+        launcher.on('data', (e) => hide_win_ulog(e,event));
+        launcher.on('download-status', (e) => event.reply('download-status', e));
+        launcher.on('progress', (e) => event.reply('progress', e));
+        launcher.on('close' , (e) => unHide(e,event));
+    }).catch(reason => {
+        //If the login fails
+        launcher.on('close' , (e) => unHide("Unable to Login Intro Microsoft Account <br> Reason : "+ reason,event));
+        console.log("We failed to log someone in because : " + reason);
+    })
   }
 
   function hide_win_ulog(log,event){

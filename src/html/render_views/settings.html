@@ -1,11 +1,21 @@
-<div class="input-group mb-3">
+<div class="input-group mb-3" id="offline">
     <span class="input-group-text" id="basic-addon1">Default Username:</span>
     <input type="text" id="user_name" value="" class="form-control" placeholder="Set a default Username"   
     aria-label="user_name" aria-describedby="basic-addon1">
+</div>
+
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">Default AuthSystem:</span>
+    <select id="authType" class="form-control" onclick="setAuthType()">
+        <option id="offlineSel" value="offline" onclick="setAuthType()"> Offline Account </option>
+        <option id="msft" value="msft" onclick="setAuthType()"> Microsoft Account </option>
+    </select>
 </div>
 
 <button onclick="setUser()" class="ibtn btn btn-secondary btn-round"> Save Username </button>
 
 <script type="text/javascript">
     $('#user_name').val(localStorage.username);
+    getCurrentAuth();
+    setAuthType();
 </script>

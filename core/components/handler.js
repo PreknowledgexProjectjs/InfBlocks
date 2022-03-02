@@ -245,7 +245,7 @@ class Handler {
       const natives = async () => {
         const natives = []
         await Promise.all(this.version.libraries.map(async (lib) => {
-          if (!lib.downloads || !lib.downloads.classifiers) return;
+          if (!lib.downloads || !lib.downloads.classifiers) return
           if (this.parseRule(lib)) return
 
           const native = this.getOS() === 'osx'
@@ -458,7 +458,7 @@ class Handler {
   runInstaller (path) {
     return new Promise(resolve => {
       const installer = child.exec(path)
-      installer.on('close', (code) => resolve())
+      installer.on('close', (code) => resolve(code))
     })
   }
 

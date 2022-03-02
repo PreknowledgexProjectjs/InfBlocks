@@ -65,7 +65,7 @@
         </nav>
 
         <!-- Page Content  -->
-        <div id="content" style="background-image: url('http://cplpreknowledge.ml:8876/pritam/Endeavour-launcher/raw/commit/30d101ad2d7256ac45f7cad059db50be32bb9566/src/html/banner.jpg');">
+        <div id="content">
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
@@ -166,6 +166,7 @@
         }
 
         function startMinecraft(){
+          loggere = "";
           var version = $('#version option:selected').val();
           var username = localStorage.username;
           var min_ram = $('#min_ram').val();
@@ -182,19 +183,31 @@
           audio.play();
         }
         function play(data){
-          var username = localStorage.username;
-          // ipcRenderer.send('launch_minecraft', {
-          //   username:username,
-          //   version:data.version,
-          //   min_ram:data.min_ram,
-          //   max_ram:data.max_ram,
-          //   type:data.type,
-          //   javaPath:data.javaPath
-          // });
+          loggere = "";
           var aData = {
             username:username,
             id:data
           };
+          var username = localStorage.username;
+          if (localStorage.authType == undefined) {
+            aData = {
+              username:username,
+              id:data,
+            };
+          }else if(localStorage.authType == 'msft') {
+            aData = {
+              username:username,
+              id:data,
+              isMsft:true,
+            };
+          }else if(localStorage.authType == 'offline') {
+            aData = {
+              username:username,
+              id:data,
+              isMsft:true,
+            };
+          }
+          
 
           ipcRenderer.send('launch_minecraft_id',aData);
 
@@ -275,10 +288,27 @@
           audio.play();
         })
 
-        function closeb(){
-          $('.modal-backdrop').remove();
+      function closeb(){
+        $('.modal-backdrop').remove();
+      }
+      function getCurrentAuth(){
+        if (localStorage.authType == undefined) {
+          $('#offlineSel').attr('selected','');
+        }else if(localStorage.authType == 'msft') {
+          $('#msft').attr('selected','');
+        }else if(localStorage.authType == 'offline') {
+          $('#offlineSel').attr('selected','');
         }
+      }
+      function setAuthType(){
+        var authType = $('#authType option:selected').val();
+        localStorage.setItem('authType' , authType)
+        if (authType == 'offline') {
+          $('#offline').show();
+        }else{
+          $('#offline').hide();
+        }
+      }
 </script>
 </body>
-
 </html>
