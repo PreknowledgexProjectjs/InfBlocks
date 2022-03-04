@@ -7,6 +7,7 @@ const launcher = new Client();
 const ib_insatlls = require('data-store')({ path: app.getPath('userData') + '/ib-instlls.json' });
 const msmc = require("msmc");
 const fetch = require("node-fetch");
+var mclc_msft = "";
 msmc.setFetch(fetch)
 var PublicWin;
 var pathWin = app.getPath('userData')+"/../.gloablx";
@@ -30,7 +31,8 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(__dirname, 'htmlRender.js'),
       contextIsolation:false,
-      nodeIntegration:true
+      nodeIntegration:true,
+      webviewTag:true,
     },
     icon: path.join(__dirname, 'icon.ico')
   })
@@ -79,7 +81,20 @@ const createWindow = () => {
 
     req.end()
   });
-
+  ipcMain.on('microsoft_login' , (event) => {
+    msmc.fastLaunch("raw",
+    (update) => {
+        //A hook for catching loading bar events and errors, standard with MSMC
+        console.log("CallBack!!!!!")
+        console.log(update)
+    }).then(result => {
+      mclc_msft = msmc.getMCLC().getAuth(result);
+    }).catch(reason => {
+        //If the login fails
+        launcher.on('close' , (e) => unHide("Unable to Login Into Microsoft Account <br> Reason : "+ reason,event));
+        console.log("We failed to log someone in because : " + reason);
+    })
+  });
   ipcMain.on('launch_minecraft_id' , (event,data) => {
     var install = ib_insatlls.get(data.id);
     var opt = {
@@ -153,17 +168,17 @@ const createWindow = () => {
 
   function LaunchMC_Microsoft(data,event){
 
-    msmc.fastLaunch("raw",
-    (update) => {
-        //A hook for catching loading bar events and errors, standard with MSMC
-        console.log("CallBack!!!!!")
-        console.log(update)
-    }).then(result => {
-        //Let's check if we logged in?
-        if (msmc.errorCheck(result)){
-            console.log(result.reason)
-            return;
-        }
+    // msmc.fastLaunch("raw",
+    // (update) => {
+    //     //A hook for catching loading bar events and errors, standard with MSMC
+    //     console.log("CallBack!!!!!")
+    //     console.log(update)
+    // }).then(result => {
+    //     //Let's check if we logged in?
+    //     if (msmc.errorCheck(result)){
+    //         console.log(result.reason)
+    //         return;
+    //     }
         let opts;
         if (typeof data.custom == 'undefined') {
           console.log("Launching Normally");
@@ -185,7 +200,7 @@ const createWindow = () => {
           console.log("Launching Advanced");
           opts = {
               clientPackage: null,
-              authorization:msmc.getMCLC().getAuth(result),
+              authorization:mclc_msft,
               root: app.getPath('userData')+`/`+"minecraft_dir",
               javaPath: data.javaPath,
               version: {
@@ -209,11 +224,11 @@ const createWindow = () => {
         launcher.on('download-status', (e) => event.reply('download-status', e));
         launcher.on('progress', (e) => event.reply('progress', e));
         launcher.on('close' , (e) => unHide(e,event));
-    }).catch(reason => {
-        //If the login fails
-        launcher.on('close' , (e) => unHide("Unable to Login Intro Microsoft Account <br> Reason : "+ reason,event));
-        console.log("We failed to log someone in because : " + reason);
-    })
+    // }).catch(reason => {
+    //     //If the login fails
+    //     launcher.on('close' , (e) => unHide("Unable to Login Intro Microsoft Account <br> Reason : "+ reason,event));
+    //     console.log("We failed to log someone in because : " + reason);
+    // })
   }
 
   function hide_win_ulog(log,event){

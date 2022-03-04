@@ -1,0 +1,31 @@
+<h4 class="indicator"></h4>
+<div class="btn-group" role="group" aria-label="Basic example">
+	<input type="url" id="url" value="https://minecraft.net/" class="form-control">
+	<button type="button" class="btn btn-primary" onclick="loadit()">Go</button>
+	<button type="button" class="btn btn-primary" onclick="webview.goBack()">Back</button>
+	<button type="button" class="btn btn-primary" onclick="webview.goForward()">Forward</button>
+</div>
+<label id="web_pageName"></label>
+	<webview src="https://minecraft.net/" style="display:inline-flex; width:100%; height:480px"></webview>
+<script>
+  loadit();
+  function loadit(){
+    const webview = document.querySelector('webview')
+    const indicator = document.querySelector('.indicator')
+    webview.loadURL($('#url').val());
+    webview.setUserAgent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) xBrowse/0.1.6 Chrome/98.0.4758.82 Electron/17.0.1 Safari/537.36`);
+    const loadstart = () => {
+      indicator.innerText = 'Please Wait... We"re Loading this webpage'
+      $('#web_pageName').html("");
+    }
+
+    const loadstop = () => {
+      indicator.innerText = '';
+      $('#web_pageName').html(webview.getTitle());
+      $('#url').val(webview.getURL());
+    }
+
+    webview.addEventListener('did-start-loading', loadstart)
+    webview.addEventListener('did-stop-loading', loadstop)
+  }
+</script>

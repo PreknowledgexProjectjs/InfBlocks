@@ -37,6 +37,12 @@
                         Minecraft
                     </a>
                 </li>
+                <li onclick='openView("minecraft_net.html","#mcNet")' id="mcNet">
+                    <a href="#" class="active">
+                        <i class="fas fa-gamepad"></i>
+                        Minecraft.net
+                    </a>
+                </li>
                 <li onclick='openView("logger.html","#log1");' id="log1">
                     <a href="#">
                         <i class="fas fa-list"></i>
@@ -124,6 +130,9 @@
         localStorage.setItem('username','Alex');
       }else if (localStorage.username == null){
         localStorage.setItem('username','Steve');
+      }
+      if(localStorage.authType == 'msft') {
+        ipcRenderer.send('microsoft_login');
       }
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
