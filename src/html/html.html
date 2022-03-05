@@ -243,6 +243,10 @@
         ipcRenderer.on('success', (event, arg) => { 
           openView("installations.html","#ins");
         });
+        ipcRenderer.send('get_location');
+        ipcRenderer.on('location', (event, arg) => { 
+          localStorage.setItem('location',arg);
+        });
         function remove(id){
           ipcRenderer.send('del_ins',id);
         }

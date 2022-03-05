@@ -47,6 +47,18 @@ const createWindow = () => {
     ib_insatlls.set('idtimestamp'+Date.now() , data);
     event.reply('success','yes')
   })
+  ipcMain.on('open_dev_tools', (event) => { 
+    PublicWin.webContents.openDevTools()
+  })
+  ipcMain.on('random_bar', (event) => { 
+    PublicWin.setProgressBar(99);
+  })
+  ipcMain.on('exit', (event) => { 
+    PublicWin.close();
+  })
+  ipcMain.on('get_location', (event, data) => {
+    event.reply('location',path.join(__dirname, '/html/render_views/xbrowse_exclusive.html'))
+  })
   ipcMain.on('del_ins', (event, id) => { 
     ib_insatlls.del(id);
     event.reply('success','yes')
