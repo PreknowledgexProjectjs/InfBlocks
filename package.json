@@ -11,7 +11,7 @@
     "uuid": "^8.3.2"
   },
   "name": "MinecraftLauncher",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Btw i'm a creeper",
   "main": "src/render.js",
   "author": "Px",

@@ -1,10 +1,24 @@
 const { app, BrowserWindow, ipcMain , Menu, MenuItem } = require('electron')
 const path = require('path');
 const https = require('https');
-const { Client, Authenticator } = require('../core/index.js');
+const { Authenticator } = require('../core/index.js');
 const MinecraftServerListPing = require("minecraft-status").MinecraftServerListPing;
-const launcher = new Client();
+var launcher;
 const ib_insatlls = require('data-store')({ path: app.getPath('userData') + '/ib-instlls.json' });
+const ib_core = require('data-store')({ path: app.getPath('userData') + '/core.json' });
+if (ib_core.get('core') == undefined) {
+  const { Client } = require('../core/index.js');
+  launcher = new Client();
+  console.log("Set Core : Core-Default");
+}else if(ib_core.get('core') == "core-old"){
+  const { Client } = require('../core-old/index.js');
+  launcher = new Client();
+  console.log("Set Core : Core-Old");
+}else if (ib_core.get('core') == "core") {
+  const { Client } = require('../core/index.js');
+  launcher = new Client();
+  console.log("Set Core : Core-Default");
+}
 const msmc = require("msmc");
 const fetch = require("node-fetch");
 var mclc_msft = "";
@@ -55,6 +69,9 @@ const createWindow = () => {
   })
   ipcMain.on('exit', (event) => { 
     PublicWin.close();
+  })
+  ipcMain.on('ib_core', (event,data) => {
+    ib_core.set('core',data);
   })
   ipcMain.on('get_location', (event, data) => {
     event.reply('location',path.join(__dirname, '/html/render_views/xbrowse_exclusive.html'))
@@ -179,7 +196,7 @@ const createWindow = () => {
   }
 
   function LaunchMC_Microsoft(data,event){
-
+      console.log("Microsoft Auth");
     // msmc.fastLaunch("raw",
     // (update) => {
     //     //A hook for catching loading bar events and errors, standard with MSMC

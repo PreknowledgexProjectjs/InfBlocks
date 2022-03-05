@@ -11,11 +11,25 @@
         <option id="msft" value="msft" onclick="setAuthType()"> Microsoft Account </option>
     </select>
 </div>
-
-<button onclick="setUser()" class="ibtn btn btn-secondary btn-round"> Save Username </button>
+<div class="input-group mb-3">
+    <button onclick="setUser()" class="ibtn btn btn-primary btn-round"> Save Username </button>
+</div>
+<br/>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">Default Core:</span>
+    <span class="input-group-text" id="basic-addon1">Needs Launcher Restart:</span>
+    <select id="coretype" class="form-control">
+        <option id="coreNew" value="core"> Core </option>
+        <option id="coreOld" value="core-old"> Core (Old) </option>
+    </select>
+</div>
+<button onclick="setCore()" class="ibtn btn btn-primary btn-round"> Save Default Core </button>
 
 <script type="text/javascript">
     $('#user_name').val(localStorage.username);
     getCurrentAuth();
     setAuthType();
+    function setCore(){
+        ipcRenderer.send('ib_core',$('#coretype option:selected').val())
+    }
 </script>
