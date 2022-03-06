@@ -1,26 +1,31 @@
 {
   "dependencies": {
+    "@tsconfig/node16": "^1.0.2",
     "adm-zip": "^0.5.9",
     "checksum": "^1.0.0",
     "data-store": "^4.0.3",
+    "eslint": "^8.10.0",
     "jquery": "^3.6.0",
     "minecraft-status": "^1.1.0",
     "msmc": "^3.0.6",
     "node-fetch": "2",
     "request": "^2.88.2",
+    "typescript": "^4.6.2",
     "uuid": "^8.3.2"
   },
   "name": "MinecraftLauncher",
   "version": "1.0.7",
   "description": "Btw i'm a creeper",
-  "main": "src/render.js",
+  "main": "ts_output/render.js",
   "author": "Px",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start-win": "set APP_DEV=true && electron .",
+    "start-win": "npm run buildtsc && set APP_DEV=true && electron .",
     "start-linux": "APP_DEV=true && electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "buildtsc": "tsc && npm run lint",
+    "lint": "npx eslint --fix"
   },
   "build": {
     "appId": "px.xbrowse",

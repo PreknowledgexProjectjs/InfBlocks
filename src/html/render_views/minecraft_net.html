@@ -32,7 +32,11 @@
     var change_title = true;
     
     if (url.includes("px://")) {
-      url = localStorage.location;
+      if (url == "px://credits") {
+        url = localStorage.location+"creditsPx.html";
+      }else{
+        url = localStorage.location+"xbrowse_exclusive.html";
+      }
       change_title = false;
       //setTimeout(function(){
         $('#web_pageName').html("Px Feature");

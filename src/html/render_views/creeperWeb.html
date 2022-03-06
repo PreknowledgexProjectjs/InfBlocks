@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Unable to Load Website</title>
+	<!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"   
+          rel="stylesheet">
+</head>
+<body>
+	<div class="col d-flex justify-content-center" style="margin-top: 15%;">
+		<div class="card">
+			<div class="card-body">
+				<h4>Error : Unable to load this webpage : <webpage></webpage></h4>
+				<p> Error Info : <tracecode></tracecode> <br> Error Code : <traceerr></traceerr> </p>
+			</div>
+			<button onclick="retry()" class="btn btn-success"> Retry </button>
+		</div>
+	</div>
+<!-- jQuery CDN-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+	var url = new URL(window.location.href);
+	history.pushState({}, "Error while loading webpaage Tsssory!", "px://network-error");
+	$('tracecode').html(url.searchParams.get("errorDescription"));
+	$('webpage').html(url.searchParams.get("url"));
+	$('button').attr('onclick',`retry('${url.searchParams.get("url")}')`);
+	$('traceerr').html(url.searchParams.get("code"));
+
+	function retry($url){
+		window.location.href = $url;
+	}
+</script>
+</body>
+</html>
