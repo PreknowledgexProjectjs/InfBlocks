@@ -16,6 +16,14 @@
 </div>
 <br/>
 <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">Default Path:</span>
+    <input type="text" id="mcPath" value="" class="form-control" placeholder="Default Path"   
+    aria-label="path" aria-describedby="basic-addon1">
+</div>
+<div class="input-group mb-3">
+    <button onclick="setPath()" class="ibtn btn btn-primary btn-round"> Save Path </button>
+</div>
+<div class="input-group mb-3">
     <span class="input-group-text" id="basic-addon1">Default Core:</span>
     <span class="input-group-text" id="basic-addon1">Needs Launcher Restart:</span>
     <select id="coretype" class="form-control">
@@ -29,7 +37,18 @@
     $('#user_name').val(localStorage.username);
     getCurrentAuth();
     setAuthType();
+    function setPath(){
+        ipcRenderer.send('set_mclocation',$('#mcPath').val())
+    }
     function setCore(){
         ipcRenderer.send('ib_core',$('#coretype option:selected').val())
     }
+    ipcRenderer.send('get_mclocation');
+    ipcRenderer.on('mcLocation',(event,arg)=>{
+        if (arg == undefined) {
+            $('#mcPath').val("default");
+        }else{
+            $('#mcPath').val(arg);
+        }
+    })
 </script>

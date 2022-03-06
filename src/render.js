@@ -17,6 +17,9 @@ import ib_coreFactory from "data-store";
 const ib_core = ib_coreFactory({
   path: app.getPath("userData") + "/core.json",
 });
+
+
+//Set Core Default
 if (ib_core.get("core") == undefined) {
   launcher = new newCore.Client();
   console.log("Set Core : Core-Default");
@@ -30,6 +33,7 @@ if (ib_core.get("core") == undefined) {
   console.log("Set Core : Core-Default");
 }
 
+//MSFT ACCOUNT & GLOBALX & More
 var mclc_msft = "";
 msmc.setFetch(fetch);
 var PublicWin;
@@ -39,6 +43,19 @@ const global_X = global_XFactory({ path: pathWin + "/expirmental.json" });
 var halfmoon = global_X.get("halfmoon_is_enabled");
 var htmlLoad;
 
+var path_minecraftDir = app.getPath("userData") + `/` + "minecraft_dir";
+if(ib_core.get('mc_dir') !== undefined){
+  path_minecraftDir = ib_core.get('mc_dir');
+}
+if(ib_core.get('mc_dir') == ".minecraft"){
+  path_minecraftDir = app.getPath("userData") + `/../` + ".minecraft";
+}
+if(ib_core.get('mc_dir') == "default"){
+  path_minecraftDir = app.getPath("userData") + `/` + "minecraft_dir";
+}
+
+console.log(path_minecraftDir);
+
 if (halfmoon == undefined) {
   global_X.set("halfmoon_is_enabled", false);
   htmlLoad = "html.html";
@@ -47,6 +64,7 @@ if (halfmoon == undefined) {
 } else {
   htmlLoad = "html.html";
 }
+//END
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -69,6 +87,8 @@ const createWindow = () => {
   }
   win.loadFile("src/html/" + htmlLoad);
 };
+
+//Ipc Listners
 ipcMain.on("save_installation", (event, data) => {
   ib_insatlls.set("idtimestamp" + Date.now(), data);
   event.reply("success", "yes");
@@ -84,6 +104,19 @@ ipcMain.on("exit", (event) => {
 });
 ipcMain.on("ib_core", (event, data) => {
   ib_core.set("core", data);
+});
+ipcMain.on('set_mclocation', (event,data) => {
+  ib_core.set('mc_dir',data);
+  if(ib_core.get('mc_dir') !== undefined){
+    path_minecraftDir = ib_core.get('mc_dir');
+  }else if(ib_core.get('mc_dir') == ".minecraft"){
+    path_minecraftDir = app.getPath("userData") + `/../` + ".minecraft";
+  }else if(ib_core.get('mc_dir') == "default"){
+    path_minecraftDir = app.getPath("userData") + `/` + "minecraft_dir";
+  }
+});
+ipcMain.on('get_mclocation', (event,data) => {
+  event.reply("mcLocation",ib_core.get("mc_dir"));
 });
 ipcMain.on("get_location", (event, data) => {
   event.reply("location", path.join(__dirname, "/html/render_views/"));
@@ -165,6 +198,8 @@ ipcMain.on("launch_minecraft_id", (event, data) => {
     LaunchMC(opt, event);
   }
 });
+//END of IPC Listenrs
+
 
 function LaunchMC(data, event) {
   console.log("Launch Minecraft Called");
@@ -175,7 +210,7 @@ function LaunchMC(data, event) {
     opts = {
       clientPackage: null,
       authorization: Authenticator.getAuth(data.username),
-      root: app.getPath("userData") + `/` + "minecraft_dir",
+      root: path_minecraftDir,
       javaPath: data.javaPath,
       version: {
         number: data.version,
@@ -191,7 +226,7 @@ function LaunchMC(data, event) {
     opts = {
       clientPackage: null,
       authorization: Authenticator.getAuth(data.username),
-      root: app.getPath("userData") + `/` + "minecraft_dir",
+      root: path_minecraftDir,
       javaPath: data.javaPath,
       version: {
         number: data.version,
@@ -216,24 +251,13 @@ function LaunchMC(data, event) {
 
 function LaunchMC_Microsoft(data, event) {
   console.log("Microsoft Auth");
-  // msmc.fastLaunch("raw",
-  // (update) => {
-  //     //A hook for catching loading bar events and errors, standard with MSMC
-  //     console.log("CallBack!!!!!")
-  //     console.log(update)
-  // }).then(result => {
-  //     //Let's check if we logged in?
-  //     if (msmc.errorCheck(result)){
-  //         console.log(result.reason)
-  //         return;
-  //     }
   let opts;
   if (typeof data.custom == "undefined") {
     console.log("Launching Normally");
     opts = {
       clientPackage: null,
       authorization: msmc.getMCLC().getAuth(result),
-      root: app.getPath("userData") + `/` + "minecraft_dir",
+      root: path_minecraftDir,
       javaPath: data.javaPath,
       version: {
         number: data.version,
@@ -249,7 +273,7 @@ function LaunchMC_Microsoft(data, event) {
     opts = {
       clientPackage: null,
       authorization: mclc_msft,
-      root: app.getPath("userData") + `/` + "minecraft_dir",
+      root: path_minecraftDir,
       javaPath: data.javaPath,
       version: {
         number: data.version,
@@ -272,11 +296,6 @@ function LaunchMC_Microsoft(data, event) {
   launcher.on("download-status", (e) => event.reply("download-status", e));
   launcher.on("progress", (e) => event.reply("progress", e));
   launcher.on("close", (e) => unHide(e, event));
-  // }).catch(reason => {
-  //     //If the login fails
-  //     launcher.on('close' , (e) => unHide("Unable to Login Intro Microsoft Account <br> Reason : "+ reason,event));
-  //     console.log("We failed to log someone in because : " + reason);
-  // })
 }
 
 function hide_win_ulog(log, event) {
@@ -291,23 +310,6 @@ function hide_win_ulog(log, event) {
 function unHide(log, event) {
   event.reply("close", log);
   PublicWin.show();
-}
-
-ipcMain.on("get_java", (event) => {
-  javaversion(function (err, version) {
-    event.reply("javaVer", version);
-  });
-});
-
-function javaversion(callback) {
-  // import { exec } from 'child_process';
-  // exec('java -version', (err, stdout, stderr) => {
-  //   if (err) {
-  //    callback(null,"NoInstall");
-  //   }
-  //   callback(null,stdout);
-  //   console.log(stdout);
-  // });
 }
 
 app.whenReady().then(() => {

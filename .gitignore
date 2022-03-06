@@ -9,7 +9,7 @@ lerna-debug.log*
 
 *.replit
 DrawAnythingHere.draw
-
+.minecraft
 
 ts_output
 # Diagnostic reports (https://nodejs.org/api/report.html)
