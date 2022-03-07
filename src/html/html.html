@@ -55,6 +55,12 @@
                       Installations
                   </a>
                 </li>
+                <li onclick='openView("java_install.html","#jeinstall");' id="jeinstall">
+                  <a href="#">
+                      <i class="fas fa-download"></i>
+                      Install Java
+                  </a>
+                </li>
                 <li onclick='openView("settings.html","#ins");' id="ins">
                   <a href="#">
                       <i class="fas fa-cog"></i>
@@ -124,6 +130,56 @@
     <script type="text/javascript">
       const $ = require('jquery');
       const { ipcRenderer } = require('electron');
+      var total = 'NaN';
+      var transfer = 'NaN';
+      var html_java = "";
+      ipcRenderer.on('java_istatus', (event,data) =>{
+        console.log(data);
+        var parseIt = data;
+        var transferred = data.transferred;
+        if (parseIt.complete == "fetch") {
+          total = parseIt.total;
+          transfer = transferred;
+        }else if(parseIt.complete == "download"){
+          total = parseIt.total;
+          transfer = transferred;
+        }else if (parseIt.complete == "extract") {
+          total = "NaN";
+          transfer = "NaN";
+        }
+        total = parseIt.total;
+          transfer = transferred;
+        setStatus();
+      })
+      function setStatus(){
+        $('#totalD').html("Total :"+total);
+        $('#transferD').html("Downloaded:"+transfer);
+        console.log(total);
+        console.log(transfer);
+        if (total == transfer) {
+          $('#djavaload').removeAttr('disabled');
+        }else{
+          $('#djavaload').attr('disabled','');
+        }
+      }
+      function calcIt(){
+        if (total == transfer) {
+          $('#djavaload').removeAttr('disabled');
+        }
+      }
+      ipcRenderer.send('getJavaInstalls');
+      var exe = ".exe";
+      ipcRenderer.on('javaVerGet',(event,data) => {
+        console.log(data);
+        html_java = "";
+        if(data.isWin !== true) {
+          exe = "";
+        }
+        $.each(data.installs,function(index,value){
+          html_java = html_java + `<option value="${value}/bin/java${exe}"> ${index} </option>`;
+          console.log(value);
+        })
+      })
       if (localStorage.username == undefined) {
         localStorage.setItem('username','Steve');
       }else if (localStorage.username == ''){
@@ -225,7 +281,7 @@
         function addInstalltion(){
           ipcRenderer.send('save_installation', {
             iname:$('#instalname').val(),
-            javapath:$('#java_exec').val().replace(/\\/g, "\\\\"),
+            javapath:$('#java_exec option:selected').val().replace(/\\/g, "\\\\"),
             version:$('#version').val(),
             min_ram:$('#min_ram').val(),
             max_ram:$('#max_ram').val(),
@@ -237,6 +293,7 @@
           localStorage.setItem('username',$('#user_name').val());
         }
         function refreshLogger(){
+
           $('#log').html(loggere);
         }
         ipcRenderer.on('success', (event, arg) => { 
@@ -272,6 +329,7 @@
         // $('#logg').append(''+arg+'</br>');
           loggere += ''+arg+'</br>';
           refreshLogger();
+          console.log(loggere);
           window.location.href="#scrollTo";
         });
         ipcRenderer.on('versions', (event,data) => {

@@ -15,10 +15,16 @@
                 </select>
             </div>
             <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Java :</span>
+                <select class="form-control" id="java_exec">
+                    <option value="java"> (No Java (Your Default java will be selected)) </option>
+                </select>
+            </div>
+            <!-- <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Java Executable Path:</span>
                 <input type="text" id="java_exec" value="" class="form-control" placeholder="Leave Empty if you dont want to set custom java"   
                     aria-label="version" aria-describedby="basic-addon1">
-            </div>
+            </div> -->
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Version:</span>
                 <input type="text" id="version" value="1.0" class="form-control" placeholder="version"   
@@ -44,3 +50,6 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $('#java_exec').html(html_java);
+</script>

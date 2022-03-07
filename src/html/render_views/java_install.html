@@ -1,0 +1,29 @@
+<div class="m-5">
+    <div class="card">
+        <h3 class="card-title"><space> + Install JAVA (x64) </h3>
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="totalD">Download Not Started</span>
+                <span class="input-group-text" id="transferD">Download Not Started</span>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Version :</span>
+                <select class="form-control" id="javav">
+                    <option value="java17"> Java17-Full </option>
+                    <option value="java8"> Java8 </option>
+                    <option value="java17lite"> Java17-Lite (40MB) (Warrning : may couldnot run mc UnTested) </option>
+                </select>
+            </div>
+            
+            <button
+                class="ibtn btn btn-primary btn-round" id="djavaload" onclick="installJava()"> Install > 
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    setStatus();
+    function installJava(){
+        ipcRenderer.send('install_java',$('#javav option:selected').val())
+    }
+</script>

@@ -4,21 +4,44 @@ import https from "https";
 import msmc from "msmc";
 import fetch from "node-fetch";
 import { Authenticator } from "../core/index.js";
-import { MinecraftServerListPing } from "minecraft-status";
+import * as javaInstall from "../src/javaInstall.js";
 var launcher;
-import global_XFactory from "data-store";
-import * as newCore from "../core/index";
-import * as OldCore from "../core-old/index";
-import ib_insatllsFactory from "data-store";
-const ib_insatlls = ib_insatllsFactory({
+import dataStore from "data-store";
+import * as newCore from "../core/index.js";
+import * as OldCore from "../core-old/index.js";
+const ib_insatlls = dataStore({
   path: app.getPath("userData") + "/ib-instlls.json",
 });
-import ib_coreFactory from "data-store";
-const ib_core = ib_coreFactory({
+const java_installs = dataStore({
+  path: app.getPath("userData") + "/je.json",
+});
+const ib_core = dataStore({
   path: app.getPath("userData") + "/core.json",
 });
 
+//XMCL PACKAGES
+import { login, offline, Authentication , lookup, GameProfile, setTexture } from "@xmcl/user";
+import { launch } from "@xmcl/core";
+import { getVersionList, MinecraftVersion, install } from "@xmcl/installer";
 
+//Set Skin
+const userUUID = "us9an835n";
+const userAccessToken = "tokenaccess";
+const userNewSkinUrl = "https://media.discordapp.net/attachments/934829686587011184/939516632240373760/player.png";
+async function syncSkin() {
+  await setTexture({
+    accessToken: userAccessToken,
+    uuid: userUUID,
+    type: "skin",
+    texture: {
+      url: userNewSkinUrl,
+      metadata: { model: "slim" }, 
+      // suppose this model is a slim model
+      // if this model is a normal model, this should be steve
+    }
+  });
+}
+syncSkin();
 //Set Core Default
 if (ib_core.get("core") == undefined) {
   launcher = new newCore.Client();
@@ -39,7 +62,7 @@ msmc.setFetch(fetch);
 var PublicWin;
 var pathWin = app.getPath("userData") + "/../.gloablx";
 
-const global_X = global_XFactory({ path: pathWin + "/expirmental.json" });
+const global_X = dataStore({ path: pathWin + "/expirmental.json" });
 var halfmoon = global_X.get("halfmoon_is_enabled");
 var htmlLoad;
 
@@ -96,6 +119,12 @@ ipcMain.on("save_installation", (event, data) => {
 ipcMain.on("open_dev_tools", (event) => {
   PublicWin.webContents.openDevTools();
 });
+ipcMain.on('getJavaInstalls', (event) => {
+  event.reply('javaVerGet',{
+    installs:java_installs.data,
+    isWin:process.platform === "win32"
+  })
+});
 ipcMain.on("random_bar", (event) => {
   PublicWin.setProgressBar(99);
 });
@@ -105,6 +134,53 @@ ipcMain.on("exit", (event) => {
 ipcMain.on("ib_core", (event, data) => {
   ib_core.set("core", data);
 });
+ipcMain.on("install_java",(event,vdata) => {
+  var minecraft = app.getPath("userData") + `/` + "minecraft_dir";
+  if(ib_core.get('mc_dir') !== undefined){
+    minecraft = ib_core.get('mc_dir');
+  }
+  if(ib_core.get('mc_dir') == ".minecraft"){
+    minecraft = app.getPath("userData") + `/../` + ".minecraft";
+  }
+  if(ib_core.get('mc_dir') == "default"){
+    minecraft = app.getPath("userData") + `/` + "minecraft_dir";
+  }
+  if(require('fs').existsSync(minecraft+"/java_versions")) {
+    console.log("Hmm Everything ok!");
+  }else{
+    console.log('Hmm Everything not ok fixing whats not ok!');
+    require('fs').mkdirSync(minecraft+"/java_versions", { recursive: true });
+  }
+  javaInstall.install({
+    ver:vdata,
+    path:minecraft+"/java_versions/",
+  },function(data){
+    console.log(data);
+    if(data.state == "downloadComplete"){
+      event.reply('java_istatus',{
+        complete:"download",
+        is_extract:"no",
+        total:0,
+        transferred:0,
+      });
+    }else if(data.state == "extracted"){
+      event.reply('java_istatus',{
+        complete:"extract",
+        is_extract:"yes",
+        total:0,
+        transferred:0,
+      });
+      java_installs.set(`JAVA:${vdata}`,data.path);
+    }else{
+      event.reply('java_istatus',{
+        complete:"fetch",
+        is_extract:"no",
+        total:data.total,
+        transferred:data.transferred,
+      });
+    }
+  });
+})
 ipcMain.on('set_mclocation', (event,data) => {
   ib_core.set('mc_dir',data);
   if(ib_core.get('mc_dir') !== undefined){
@@ -131,6 +207,43 @@ ipcMain.on("get_installations", (event) => {
 ipcMain.on("launch_minecraft", (event, data) => {
   //
   LaunchMC(data, event);
+});
+ipcMain.on("intsall_xmcl", (event, data) => {
+  var minecraft = app.getPath("userData") + `/` + "minecraft_dir";
+  if(ib_core.get('mc_dir') !== undefined){
+    minecraft = ib_core.get('mc_dir');
+  }
+  if(ib_core.get('mc_dir') == ".minecraft"){
+    minecraft = app.getPath("userData") + `/../` + ".minecraft";
+  }
+  if(ib_core.get('mc_dir') == "default"){
+    minecraft = app.getPath("userData") + `/` + "minecraft_dir";
+  }
+  var aVersion = data;
+  //async function installIt() {
+    install(aVersion, minecraft);
+    //console.log("Called");
+  //}
+  //installIt();
+});
+ipcMain.on("launch_minecraftXMCL", (event, data) => {
+  var gamePath = app.getPath("userData") + `/` + "minecraft_dir";
+  if(ib_core.get('mc_dir') !== undefined){
+    gamePath = ib_core.get('mc_dir');
+  }
+  if(ib_core.get('mc_dir') == ".minecraft"){
+    gamePath = app.getPath("userData") + `/../` + ".minecraft";
+  }
+  if(ib_core.get('mc_dir') == "default"){
+    gamePath = app.getPath("userData") + `/` + "minecraft_dir";
+  }
+  const javaPath = "D:\\java-runtime-beta\\bin\\java.exe";
+  const version = data.version;
+  console.log(javaPath);
+  console.log(version);
+  console.log(gamePath);
+  const proc = launch({ gamePath, javaPath , version });
+  console.log(proc);
 });
 
 ipcMain.on("get_versions", (event) => {
@@ -256,7 +369,7 @@ function LaunchMC_Microsoft(data, event) {
     console.log("Launching Normally");
     opts = {
       clientPackage: null,
-      authorization: msmc.getMCLC().getAuth(result),
+      authorization: mclc_msft,
       root: path_minecraftDir,
       javaPath: data.javaPath,
       version: {
