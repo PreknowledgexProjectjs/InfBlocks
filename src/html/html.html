@@ -132,7 +132,7 @@
       const { ipcRenderer } = require('electron');
       var total = 'NaN';
       var transfer = 'NaN';
-      var html_java = "";
+      var html_java = `<option value="java"> Default Java </option>`;
       ipcRenderer.on('java_istatus', (event,data) =>{
         console.log(data);
         var parseIt = data;
@@ -171,7 +171,7 @@
       var exe = ".exe";
       ipcRenderer.on('javaVerGet',(event,data) => {
         console.log(data);
-        html_java = "";
+        html_java = `<option value="java"> Default Java </option>`;
         if(data.isWin !== true) {
           exe = "";
         }
