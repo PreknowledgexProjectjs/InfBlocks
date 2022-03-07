@@ -19,6 +19,8 @@ const ib_core = dataStore({
   path: app.getPath("userData") + "/core.json",
 });
 
+const DiscordRPC = require('discord-rpc');
+
 //XMCL PACKAGES
 import { login, offline, Authentication , lookup, GameProfile, setTexture } from "@xmcl/user";
 import { launch } from "@xmcl/core";
@@ -317,6 +319,9 @@ ipcMain.on("launch_minecraft_id", (event, data) => {
 function LaunchMC(data, event) {
   console.log("Launch Minecraft Called");
   console.log(data);
+  setTimeout(function(){
+    setActivity("Playing Minecraft "+data.version,"in InfiniteBlocks Client");
+  },15e3);
   let opts;
   if (typeof data.custom == "undefined") {
     console.log("Launching Normally");
@@ -420,8 +425,55 @@ function hide_win_ulog(log, event) {
   }
 }
 
+// Set this to your Client ID.
+const clientId = '950417843797770280';
+
+// Only needed if you want to use spectate, join, or ask to join
+DiscordRPC.register(clientId);
+
+const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+const startTimestamp = new Date();
+
+async function setActivity(largeImageKey = 'Creepers are very good isnt',smallImageKey = 'Evoker drops totem of undying sadly does not works for creepers') {
+  if (!rpc) {
+    return;
+  }
+
+  // You'll need to have snek_large and snek_small assets uploaded to
+  // https://discord.com/developers/applications/<application_id>/rich-presence/assets
+  rpc.setActivity({
+    details: largeImageKey,
+    state: smallImageKey,
+    startTimestamp,
+    largeImageKey: 'image1',
+    largeImageText: largeImageKey,
+    smallImageKey: 'image1',
+    smallImageText: smallImageKey,
+    instance: true,
+  });
+}
+
+rpc.on('ready', () => {
+  setActivity();
+
+  // activity can only be set every 15 seconds
+  //setInterval(() => {
+    //setActivity();
+  //}, 15e3);
+});
+
+ipcMain.on('setRpc', (event,message) => {
+  setActivity(message.one,message.two);
+})
+
+rpc.login({ clientId }).catch(console.error);
+
 function unHide(log, event) {
   event.reply("close", log);
+  setTimeout(() => {
+    setActivity();
+  }, 15e3);
+  //setActivity();
   PublicWin.show();
 }
 
