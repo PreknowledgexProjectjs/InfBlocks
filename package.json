@@ -1,6 +1,6 @@
 {
   "name": "MinecraftLauncher",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Btw i'm a creeper",
   "main": "ts_output/render.js",
   "author": "Px",
@@ -14,7 +14,7 @@
     "lint": "npx eslint --fix"
   },
   "build": {
-    "appId": "px.xbrowse",
+    "appId": "px.mclauncher",
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "app_icns/icon.icns"
