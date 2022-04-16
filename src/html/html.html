@@ -164,13 +164,22 @@
       function setStatus(){
         $('#totalD').html("Total :"+total);
         $('#transferD').html("Downloaded:"+transfer);
+        setProgress("100",`Downloading Java ${total}/${transfer} Downloaded`,"success");
         console.log(total);
         console.log(transfer);
+        if(total == transfer){
+          setProgress("100",`Ready!`,"success");
+        }
         if (total == transfer) {
           $('#djavaload').removeAttr('disabled');
         }else{
           $('#djavaload').attr('disabled','');
         }
+      }
+      function setProgress(total,text,color){
+        $('#progBar').html(text);
+        $('#progBar').attr('class',`progress-bar bg-${color} progress-bar-animated`);
+        $('#progBar').attr('style',`width: ${total}%;`);
       }
       function calcIt(){
         if (total == transfer) {
@@ -199,6 +208,10 @@
       }
       if(localStorage.authType == 'msft') {
         ipcRenderer.send('microsoft_login');
+        setProgress("100","Sending Microsoft Account Sign-In","success");
+        setTimeout(()=>{
+          setProgress("100","Ready!","success");
+        },2200);
       }
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
@@ -237,7 +250,8 @@
             }
           });
           var audio = new Audio('creeper/Explosion1.ogg');
-          audio.play();
+          //audio.play();
+          ipcRenderer.send('getJavaInstalls');
         }
 
         function startMinecraft(){
@@ -259,6 +273,7 @@
         }
         //play game
         function play(data){
+          setProgress("100","..","success");
           $('#progBar').attr('style','width:10%;');
           $('#progBar').html('Launching Game');
           loggere = "";
@@ -293,7 +308,7 @@
           ipcRenderer.send('launch_minecraft_id',aData);
 
           var audio = new Audio('creeper/Creeper_fuse.ogg');
-          audio.play();
+          //audio.play();
         }
         function addInstalltion(){
           ipcRenderer.send('save_installation', {
@@ -345,6 +360,14 @@
         ipcRenderer.on('logger', (event, arg) => {
         // $('#logg').append(''+arg+'</br>');
           loggere += ''+arg+'</br>';
+          if(arg.includes("OpenAL")){
+            setProgress("100","Game Started","success");
+          }
+          if(arg.includes("java.lang.UnsupportedClassVersionError: net/minecraft/client/main/Main has been compiled by a more recent")){
+            setTimeout(() =>{
+              setProgress("100","Oops Minecaft has crashed due to Lower Java Version Please note that 1.17+ Required Java16 or Higher","danger");
+            },1200);
+          }
           refreshLogger();
           console.log(loggere);
           window.location.href="#scrollTo";
@@ -356,6 +379,7 @@
           console.log(data);
         })
         ipcRenderer.on('progress', (event, arg) => {
+          setProgress("100",`Init Files : ${arg.total}`,"success");
           if (typeof arg.total !== 'undefined') {
             $('#progress').show();
             $('#downloaded').html( " <text class='text text-primary'> " + arg.task + " / " +arg.total + " </text>" + " Downloaded");
@@ -368,6 +392,7 @@
           loggere = "";
           $('#start_btn').removeAttr('disabled');
           if (arg == 0) return;
+          setProgress("100","Oops Minecaft has Crashed","danger");
           var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
           myModal.toggle();
           $('#msg_close').html(` Minecaft Closed with code : ${arg} <br> <div class="alert alert-warning">If you closed Minecraft then dont worry. but if minecraft crashed please remove any mod packs, shaders and try again. If still Minecraft fails to start create a new installation or try a different version of the game.</div>`);

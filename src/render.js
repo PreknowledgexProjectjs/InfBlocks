@@ -411,6 +411,7 @@ function LaunchMC_Microsoft(data, event) {
 
   launcher.on("debug", (e) => event.reply("logger", e));
   launcher.on("data", (e) => hide_win_ulog(e, event));
+  launcher.on("data", (e) => event.reply("logger", e));
   launcher.on("download-status", (e) => event.reply("download-status", e));
   launcher.on("progress", (e) => event.reply("progress", e));
   launcher.on("close", (e) => unHide(e, event));
@@ -419,9 +420,9 @@ function LaunchMC_Microsoft(data, event) {
 function hide_win_ulog(log, event) {
   event.reply("logger", log);
   if (log.includes("OpenAL initialized")) {
-    PublicWin.hide();
+    //PublicWin.hide();
   } else if (log.includes("Setting User")) {
-    PublicWin.hide();
+    //PublicWin.hide();
   }
 }
 
@@ -434,7 +435,7 @@ DiscordRPC.register(clientId);
 const rpc = new DiscordRPC.Client({ transport: 'ipc' });
 const startTimestamp = new Date();
 
-async function setActivity(largeImageKey = 'Creepers are very good isnt',smallImageKey = 'Evoker drops totem of undying sadly does not works for creepers') {
+async function setActivity(largeImageKey = 'Wandering Around',smallImageKey = 'No Version Launched Yet!') {
   if (!rpc) {
     return;
   }
