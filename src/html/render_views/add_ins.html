@@ -46,10 +46,52 @@
                     aria-label="max_ram" aria-describedby="basic-addon1">
             </div>
 
-            <button class="ibtn btn btn-primary btn-round" onclick="addInstalltion()"> Add Installation </button>
+            <button class="ibtn btn btn-primary btn-round" onclick="addInstalltion()" disabled> Add Installation </button>
         </div>
     </div>
 </div>
 <script type="text/javascript">
     $('#java_exec').html(html_java);
+    $.ajax({
+        url:"https://launchermeta.mojang.com/mc/game/version_manifest.json",
+        success:function(data) {
+            data = JSON.parse(JSON.stringify(data));
+            $('#version').val(data.latest.release);
+            verify_version_jvm($('#version').val());
+        }
+    });
+    $('#version').keyup((e) => {
+        verify_version_jvm($('#version').val());
+    });
+
+    function verify_version_jvm(ver){
+        $.ajax({
+            url:"https://launchermeta.mojang.com/mc/game/version_manifest.json",
+            success:function(data) {
+                data = JSON.parse(JSON.stringify(data));
+                $.each(data.versions , (index,data) => {
+                    if(data.id == ver){
+                        $.ajax({
+                            url:`${data.url}`,
+                            success:function(data){
+                                console.log(data.javaVersion);
+                                if(data.javaVersion.majorVersion == 17){
+                                    setProgress("100","Warrning ! Select Java 17 from Install Java Section and Select java17 in installations selectbar","danger");
+                                    $('.ibtn').removeAttr('disabled');
+                                    toastr.error("Warrning ! Select Java 17 from Install Java Section and Select java17 in installations selectbar");
+                                }else if(data.javaVersion.majorVersion == 16){
+                                    setProgress("100","Warrning ! Select Java 17 from Install Java Section and Select java17 in installations selectbar","danger");
+                                    $('.ibtn').removeAttr('disabled');
+                                    toastr.error("Warrning ! Select Java 17 from Install Java Section and Select java17 in installations selectbar");
+                                }else{
+                                    setProgress("100","Ready!","primary");
+                                    $('.ibtn').removeAttr('disabled');
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>

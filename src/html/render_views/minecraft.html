@@ -5,7 +5,8 @@
   <b> Microsoft Login is only Supported in Installations Section <button onclick='openView("installations.html","#ins");' class="ibtn btn btn-success"> Go to Installations ></button> </b>
 </div> -->
 <div class="card-body">
-    <div id="i_all" style="margin-top: 5px; height: 420px; width: 870px; overflow: scroll;"></div>
+  <a class="btn btn-primary" onclick='openView("add_ins.html");'>Add Installation + </a>
+  <div id="i_all" style="margin-top: 5px; height: 420px; width: 870px; overflow: scroll;"></div>
 </div>
 <script type="text/javascript" > initVerList() </script>
 <script> ipcRenderer.send('get_installations'); </script> 

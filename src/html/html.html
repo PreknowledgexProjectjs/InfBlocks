@@ -14,13 +14,15 @@
      <!-- Our Custom CSS -->
     <link rel="stylesheet" href="new-ui.css">
 
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
 </head>
 
-<body >
+<body class="dark-mode">
 
     <div class="wrapper">
         <!-- Sidebar  -->
@@ -37,12 +39,12 @@
                         Minecraft
                     </a>
                 </li>
-                <li onclick='openView("minecraft_net.html","#mcNet")' id="mcNet">
+                <!-- <li onclick='openView("minecraft_net.html","#mcNet")' id="mcNet">
                     <a href="#" class="active">
                         <i class="fas fa-gamepad"></i>
                         Minecraft.net
                     </a>
-                </li>
+                </li> -->
                 <li onclick='openView("logger.html","#log1");' id="log1">
                     <a href="#">
                         <i class="fas fa-list"></i>
@@ -67,12 +69,18 @@
                       Settings
                   </a>
                 </li>
-                <li >
+                <li onclick='toggleMode()' id="ins">
+                  <a href="#">
+                      <i class="fas fa-moon"></i>
+                      Dark Mode (Beta)
+                  </a>
+                </li>
+                <!-- <li >
                   <a href="oldUi.html">
                       <i class="fas fa-back"></i>
                       Open Old UI
                   </a>
-                </li>
+                </li> -->
             </ul>
         </nav>
 
@@ -137,12 +145,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"> </script>
+    <script type="text/javascript">const $ = require('jquery');</script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript">
-      const $ = require('jquery');
       const { ipcRenderer } = require('electron');
+      
+      const toastr = require('toastr');
       var total = 'NaN';
       var transfer = 'NaN';
       var html_java = `<option value="java"> Default Java </option>`;
+
+      function setupMCL(){
+        ipcRenderer.send('install_java',"java17lite");
+      }
       ipcRenderer.on('java_istatus', (event,data) =>{
         console.log(data);
         var parseIt = data;
@@ -168,7 +183,7 @@
         console.log(total);
         console.log(transfer);
         if(total == transfer){
-          setProgress("100",`Ready!`,"success");
+          setProgress("100",`Ready!`,"primary");
         }
         if (total == transfer) {
           $('#djavaload').removeAttr('disabled');
@@ -195,9 +210,12 @@
           exe = "";
         }
         $.each(data.installs,function(index,value){
-          html_java = html_java + `<option value="${value}/bin/java${exe}"> ${index} </option>`;
+          html_java = html_java + `<option value="${value}/bin/java${exe}" id="${index}"> ${index} </option>`;
           console.log(value);
         })
+        if(!html_java.includes('JAVA:java17lite')){
+          setupMCL();
+        }
       })
       if (localStorage.username == undefined) {
         localStorage.setItem('username','Steve');
@@ -420,6 +438,16 @@
         }else{
           $('#offline').hide();
         }
+      }
+      function toggleMode() {
+       var element = document.body;
+       element.classList.toggle("dark-mode");
+       localStorage.setItem('mode',element.classList.value);
+      }
+      console.log(localStorage.mode);
+      if(localStorage.mode == 'dark-mode'){
+        var element = document.body;
+        element.classList.toggle("dark-mode");
       }
 </script>
 </body>
