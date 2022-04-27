@@ -9,7 +9,7 @@ body {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 /* Track */
@@ -300,9 +300,19 @@ a.article:hover {
     background-color: #121211;
 }
 
-.dark-mode .navbar {
+.dark-mode .navbar , .dark-mode .card-title {
     color: white;
     background-color: #121211;
+}
+
+.dark-mode *{
+    color: white;
+    background-color: #121211;
+}
+
+.dark-mode .active{
+    background: #121211;
+    color: white;
 }
 
 .dark-mode .nav {
@@ -323,6 +333,11 @@ a.article:hover {
 }
 
 .dark-mode .form-control {
+    background-color: #121211;
+    color: white;
+}
+
+.dark-mode .bg-primary {
     background-color: #121211;
     color: white;
 }

@@ -20,14 +20,19 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
 </head>
 
-<body class="dark-mode">
+<body class="">
 
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
-            <div class="sidebar-header">
+            <div class="sidebar-header animate__animated animate__flash">
                 <h3>Infinite Blocks</h3>
                 <strong>IB</strong>
             </div>
@@ -39,12 +44,12 @@
                         Minecraft
                     </a>
                 </li>
-                <!-- <li onclick='openView("minecraft_net.html","#mcNet")' id="mcNet">
+                <li onclick='openView("minecraft_net.html","#mcNet")' id="mcNet">
                     <a href="#" class="active">
-                        <i class="fas fa-gamepad"></i>
-                        Minecraft.net
+                        <i class="fa fa-globe"></i>
+                        xBrowse
                     </a>
-                </li> -->
+                </li>
                 <li onclick='openView("logger.html","#log1");' id="log1">
                     <a href="#">
                         <i class="fas fa-list"></i>
@@ -87,7 +92,7 @@
         <!-- Page Content  -->
         <div id="content">
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-dark animate__animated animate__bounceInDown">
                 <div class="container-fluid">
 
                     <button type="button" id="sidebarCollapse" class="btn btn-info">
@@ -96,17 +101,18 @@
                     </button>
                 
 
-                    <div class="card" id="progress" style="display: none;">
-                      <div class="card-body">
-                        Initliazing Version
-                        <br>Total Initliazed/Downloaded : <p id="downloaded"></p>
-                      </div>
-                    </div>
+                    
                 </div>
             </nav>
             <!-- <div class="card m-5">
               <div class="card-body" id="javaV"></div>
             </div> -->
+            <div class="card" id="progress" style="display: none;">
+              <div class="card-body">
+                Initliazing Version
+                <br>Total Initliazed/Downloaded : <p id="downloaded"></p>
+              </div>
+            </div>
             <div id="ajaxView">
               
             </div>
@@ -130,9 +136,9 @@
       </div>
     </div>
 
-    <div class="footer fixed-bottom" style="background: #7386D5;">
+    <div class="footer fixed-bottom animate__animated animate__slideInUp" style="background: #7386D5;">
 
-      <div class="progress" style="height: 20px; margin:2%;">
+      <div class="progress animate__animated animate__bounceIn" style="height: 20px; margin:2%;">
         <div class="progress-bar bg-success progress-bar-animated" id="progBar" role="progressbar" style="width: 100%;" aria-valuemin="0" aria-valuemax="100">
           Ready!
         </div>
@@ -153,6 +159,7 @@
       const toastr = require('toastr');
       var total = 'NaN';
       var transfer = 'NaN';
+
       var html_java = `<option value="java"> Default Java </option>`;
 
       function setupMCL(){
@@ -213,8 +220,14 @@
           html_java = html_java + `<option value="${value}/bin/java${exe}" id="${index}"> ${index} </option>`;
           console.log(value);
         })
+        $('#jeinstall').hide();
+        if(process.platform === 'win32'){
+          $('#jeinstall').show();
+        }
         if(!html_java.includes('JAVA:java17lite')){
-          setupMCL();
+          if(process.platform === 'win32'){
+            setupMCL();
+          }
         }
       })
       if (localStorage.username == undefined) {
@@ -262,8 +275,8 @@
             success:function(data){
               $('#ajaxView').html(data);
               if ($class !== 'no_creepers') {
-                $('li').removeClass('active');
-                $($class).attr('class','active');
+                //$('li').removeClass('active');
+                //$($class).attr('class','active');
               }
             }
           });
@@ -333,8 +346,8 @@
             iname:$('#instalname').val(),
             javapath:$('#java_exec option:selected').val().replace(/\\/g, "\\\\"),
             version:$('#version').val(),
-            min_ram:$('#min_ram').val(),
-            max_ram:$('#max_ram').val(),
+            min_ram:`${$('#range_ram').val()}M`,
+            max_ram:`${$('#range_ram').val()}M`,
             type:$('#v_type option:selected').val(),
             cversion:$('#cversion').val()
           });
@@ -362,13 +375,13 @@
             var inObj = JSON.stringify(value);
             console.log(inObj);
             $('#i_all').append(`
-              <div class="card" style="margin-top: 10px;">
+              <div class="card " style="margin-top: 10px;">
                 <div class="card-body">
                   <h3 class="card-title"> ${value.iname} </h3>
                   Version : ${value.version} / ${value.type} || 
                   Max / Min Ram : ${value.max_ram} / ${value.min_ram} 
-                  <button class="ibtn btn btn-round btn-primary" onclick='play("${index}")'> <i class="fas fa-play"></i> </button>
-                  <button class="ibtn btn btn-round btn-danger" onclick="remove('${index}')"> <i class="fas fa-trash"></i> </button>
+                  <button class="animate__animated animate__flip ibtn btn btn-round btn-primary" onclick='play("${index}")'> <i class="fas fa-play"></i> </button>
+                  <button class="animate__animated animate__flip ibtn btn btn-round btn-danger" onclick="remove('${index}')"> <i class="fas fa-trash"></i> </button>
                 </div>
               </div>
             `);

@@ -8,6 +8,7 @@ console.log(JavaList);
 var isWin = process.platform === "win32";
 module.exports.install = function (data,callback){
 	var url = "";
+	if (!isWin) return;
 	var zipSave = "";
 	if (data.ver == "java8") {
 		if (isWin) {
@@ -86,7 +87,7 @@ module.exports.install = function (data,callback){
 	  		})
 		}catch (e){
 			console.log(e);
-			process.exit(0);
+			process.exit(1);
 		}
 	    // require('fs').createReadStream(data.path+zipSave)
 	  		// .pipe(unzipper.Extract({ path: data.path+zipSave+"_extract" }))

@@ -9,7 +9,7 @@
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Type :</span>
-                <select class="form-control" id="v_type">
+                <select class="form-control" onchange="setVersion()" id="v_type">
                     <option value="release"> Release </option>
                     <option value="snapshot"> Snapshot </option>
                 </select>
@@ -35,16 +35,20 @@
                 <input type="text" id="cversion" value="" class="form-control" placeholder="Custom Version Example : AngryVillager_Mod"   
                     aria-label="version" aria-describedby="basic-addon1">
             </div>
-            <div class="input-group mb-3">
+           <!--  <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Min Ram:</span>
                 <input type="text" id="min_ram" value="512M" class="form-control" placeholder="min_ram"   
                     aria-label="min_ram" aria-describedby="basic-addon1">
-            </div>
+            </div> -->
             <div class="input-group mb-3">
+                <label for="range_ram" class="form-label">Ram Allocated (<b id="allocated"></b>M):</label>
+                <input type="range" class="form-range" min="512" max="8096" step="1" id="range_ram">
+            </div>
+            <!-- <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Max Ram:</span>
                 <input type="text" id="max_ram" value="512M" class="form-control" placeholder="max_ram"   
                     aria-label="max_ram" aria-describedby="basic-addon1">
-            </div>
+            </div> -->
 
             <button class="ibtn btn btn-primary btn-round" onclick="addInstalltion()" disabled> Add Installation </button>
         </div>
@@ -52,18 +56,32 @@
 </div>
 <script type="text/javascript">
     $('#java_exec').html(html_java);
-    $.ajax({
-        url:"https://launchermeta.mojang.com/mc/game/version_manifest.json",
-        success:function(data) {
-            data = JSON.parse(JSON.stringify(data));
-            $('#version').val(data.latest.release);
-            verify_version_jvm($('#version').val());
-        }
-    });
+    setInterval(() => {
+        $('#allocated').html($('#range_ram').val());
+    },200);
+    setVersion();
+
+    function setVersion(){
+        $.ajax({
+            url:"https://launchermeta.mojang.com/mc/game/version_manifest.json",
+            success:function(data) {
+                data = JSON.parse(JSON.stringify(data));
+                $('#version').val(data.latest.release);
+                if($('#v_type').val() == 'snapshot'){
+                    $('#version').val(data.latest.snapshot);
+                }
+                verify_version_jvm($('#version').val());
+            }
+        });
+    }
     $('#version').keyup((e) => {
         verify_version_jvm($('#version').val());
     });
+    const os = require("os");
+    const totalRAM = os.totalmem();
 
+    $('#range_ram').attr('max',`${totalRAM / (1024 * 1024)}`);
+    $('#range_ram').val('1024');
     function verify_version_jvm(ver){
         $.ajax({
             url:"https://launchermeta.mojang.com/mc/game/version_manifest.json",
