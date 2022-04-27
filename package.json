@@ -1,9 +1,9 @@
 {
-  "name": "MinecraftLauncher",
-  "version": "1.0.9",
-  "description": "Btw i'm a creeper",
+  "name": "InfiniteBlocks",
+  "version": "2.0.0",
+  "description": "InfiniteBlocks is Minecraft Launcher Build with Electron.js",
   "main": "ts_output/render.js",
-  "author": "Px",
+  "author": "PreknowledgeX",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -14,7 +14,7 @@
     "lint": "npx eslint --fix"
   },
   "build": {
-    "appId": "px.mclauncher",
+    "appId": "px.ibclientlauncher",
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "app_icns/icon.icns"
@@ -23,7 +23,15 @@
       "asar": true,
       "target": "nsis",
       "icon": "app_icns/icon.png"
-    }
+    },
+    "linux":{
+      "target":[
+        "deb",
+        "snap",
+        "AppImage"
+      ],
+      "category":"Games"
+    },
   },
   "dependencies": {
     "@tsconfig/node16": "^1.0.2",
