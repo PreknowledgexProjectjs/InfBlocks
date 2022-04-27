@@ -30,8 +30,8 @@
         "snap",
         "AppImage"
       ],
-      "category":"Games"
-    },
+      "category":"Game"
+    }
   },
   "dependencies": {
     "@tsconfig/node16": "^1.0.2",
