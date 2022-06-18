@@ -1,5 +1,7 @@
-# PX Launcher
+# IB-Launcher DEV
 ## The brand new free launcher 
 
-> ### What is PX Launcher?
-> This is PX Launcher. A new free launcher for Minecraft made in pure JavaScript 
+> ### What is IB Launcher?
+> This is IB Launcher. A new free launcher for Minecraft made in pure JavaScript 
+
+> Now Supports 1.19

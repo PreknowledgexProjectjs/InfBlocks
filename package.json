@@ -1,9 +1,10 @@
 {
   "name": "InfiniteBlocks",
-  "version": "2.0.0",
+  "version": "2.0.1-dev",
   "description": "InfiniteBlocks is Minecraft Launcher Build with Electron.js",
   "main": "ts_output/render.js",
-  "author": "PreknowledgeX",
+  "homepage":"https://google.com",
+  "author": "PreknowledgeX <preknolwedge@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -25,6 +26,7 @@
       "icon": "app_icns/icon.png"
     },
     "linux":{
+      "icon":"app_icns/icon.png",
       "target":[
         "deb",
         "snap",
