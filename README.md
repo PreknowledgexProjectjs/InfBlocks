@@ -1,5 +1,6 @@
-# PX Launcher
+# Project Archived
+# InfLauncher (ARCHIVED)
 ## The brand new free launcher 
 
-> ### What is PX Launcher?
-> This is PX Launcher. A new free launcher for Minecraft made in pure JavaScript 
+> ### What is InfLauncher?
+> This is InfLauncher. A new free launcher for Minecraft made in pure JavaScript 
